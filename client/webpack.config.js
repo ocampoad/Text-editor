@@ -32,6 +32,7 @@ module.exports = () => {
         publicPath: './',
         orientation: 'portrait',
         display: 'standalone',
+        incognito: 'split',
         icons: [
           {
             src: path.resolve('src/images/logo.png'),
