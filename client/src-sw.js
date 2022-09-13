@@ -12,12 +12,16 @@ const pageCache = new CacheFirst({
   plugins: [
     new CacheableResponsePlugin({
       statuses: [0, 200],
+      headers: {
+        'X-Is-Cachebale': 'true',
+      }
     }),
     new ExpirationPlugin({
       maxAgeSeconds: 30 * 24 * 60 * 60,
     }),
   ],
 });
+
 
 warmStrategyCache({
   urls: ['/index.html', '/'],
@@ -27,4 +31,4 @@ warmStrategyCache({
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // TODO: Implement asset caching
-registerRoute();
+registerRoute(({url}) => url.pathname.startsWith('/'), pageCache);
