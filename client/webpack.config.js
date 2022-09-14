@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const path = require('path');
-const { GenerateSW } = require('workbox-webpack-plugin');
+const { GenerateSW, InjectManifest } = require('workbox-webpack-plugin');
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 // TODO: Add CSS loaders and babel to webpack.
@@ -23,20 +23,28 @@ module.exports = () => {
         template: './index.html',
         title: 'Webpack Plugin',
       }),
-      new GenerateSW(),
+      // new GenerateSW(),
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js'
+      }),
       new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
         name: 'Just Another Text Editor PWA',
         short_name:'JATE PWA',
         description:'An online/offline text editor using progressive web applications',
         background_color:'#ffffff',
         publicPath: './',
+        start_url: '/',
         orientation: 'portrait',
         display: 'standalone',
         incognito: 'split',
         icons: [
           {
             src: path.resolve('src/images/logo.png'),
-            sizes:[96,128,192,256,384,512]
+            sizes:[96,128,192,256,384,512],
+            destination: path.join('assets', 'icons')
           }
         ]
       })
@@ -54,7 +62,11 @@ module.exports = () => {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env']
+              presets: ['@babel/preset-env'],
+              plugins: [
+                '@babel/plugin-proposal-object-rest-spread',
+                '@babel/transform-runtime',
+              ]
             }
           }
         },
