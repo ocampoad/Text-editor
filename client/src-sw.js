@@ -32,3 +32,5 @@ registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // TODO: Implement asset caching
 registerRoute(({url}) => url.pathname.startsWith('/'), pageCache);
+
+self.addEventListener('fetch',() => console.log("fetch"));
