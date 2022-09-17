@@ -30,7 +30,6 @@ warmStrategyCache({
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
-// TODO: Implement asset caching
-registerRoute(({url}) => url.pathname.startsWith('/'), pageCache);
+registerRoute(({url}) => url.pathname.startsWith('/'), pageCache); // caches data when / route is hit
 
-self.addEventListener('fetch',() => console.log("fetch"));
+self.addEventListener('fetch',() => console.log("fetch")); // a requirement for serviceworker that makes service worker work offline
